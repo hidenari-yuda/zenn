@@ -1,0 +1,103 @@
+---
+title: "【RPA】Goでブラウザ操作/自動化を実装する【go-rod】"
+emoji: "🤖"
+type: "tech"
+topics:
+  - "go"
+  - "go-rod"
+  - "rpa"
+  - "chrome"
+  - "browser"
+published: true
+published_at: "2023-11-30 21:11"
+---
+
+Goでブラウザ操作/自動化を実装するライブラリ「go-rod」を使ってみました。
+
+## go-rodとは
+
+go-rod(https://github.com/go-rod/rod)は、Goでブラウザ操作/自動化を実装するライブラリです。
+
+Goのブラウザ操作/自動化ライブラリは他にもいくつかありますが、スター数や最近の更新頻度などを考慮すると、go-rodが一番良さそうでした。
+
+> Rod is a high-level driver directly based on DevTools Protocol. It's designed for web automation and scraping for both high-level > > and low-level use, senior developers can use the low-level packages and functions to easily customize or build up their own version > of Rod, the high-level functions are just examples to build a default version of Rod.
+
+## 特徴
+
+特徴としては、以下のようなものがあります。
+
+> Features
+> Chained context design, intuitive to timeout or cancel the long-running task
+> Auto-wait elements to be ready
+> Debugging friendly, auto input tracing, remote monitoring headless browser
+> Thread-safe for all operations
+> Automatically find or download browser
+> High-level helpers like WaitStable, WaitRequestIdle, HijackRequests, WaitDownload, etc
+> Two-step WaitEvent design, never miss an event (how it works)
+> Correctly handles nested iframes or shadow DOMs
+> No zombie browser process after the crash (how it works)
+> CI enforced 100% test coverage
+
+ざっくりと訳すと以下のような感じです。
+
+- コンテキスト設計によるチェーン化、長時間実行されるタスクのタイムアウトやキャンセルが直感的に行える
+- 要素が準備できるまで自動的に待機する
+- デバッグしやすい、自動入力トレース、リモートモニタリングヘッドレスブラウザ
+- すべての操作に対してスレッドセーフ
+- ブラウザを自動的に検索またはダウンロード
+- WaitStable、WaitRequestIdle、HijackRequests、WaitDownloadなどのような高レベルのヘルパー
+- 2段階のWaitEvent設計、イベントを見逃さない（動作方法）
+- ネストされたiframeやshadow DOMを正しく処理する
+- クラッシュ後にゾンビブラウザプロセスがない（動作方法）
+- CIによる100％のテストカバレッジ
+
+## インストール
+
+```
+go get github.com/go-rod/rod
+```
+
+## 使い方
+
+### ブラウザを起動する
+
+```
+// ブラウザを起動する
+page := rod.New().MustConnect().MustPage("https://www.google.com/")
+```
+
+### ブラウザを操作する
+
+```
+// 検索ボックスに入力する
+page.MustElement("#lst-ib").MustInput("go-rod")
+
+// 検索ボタンをクリックする
+page.MustElement("[name='btnK']").MustClick()
+
+// 検索結果のタイトルを取得する
+title := page.MustElement("#main > div:nth-child(7) > div > div:nth-child(1) > div > div > div:nth-child(1) > div > div > div > a > h3").MustText()
+
+fmt.Println(title)
+```
+
+### ブラウザを閉じる
+
+```
+// ブラウザを閉じる
+page.MustClose()
+```
+
+## 実行結果
+
+```
+go-rod - Google 検索
+```
+
+## まとめ
+
+今回は、ブラウザを起動して検索ボックスに入力し、検索結果のタイトルを取得するという簡単な操作でしたが、これを応用すれば、ブラウザ操作/自動化を実装することができそうです。
+
+## 参考
+
+-https://github.com/go-rod/rod
